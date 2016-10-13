@@ -1,0 +1,34 @@
+citHeader("To cite package 'MBC' in publications use:")
+
+citEntry(entry="Article",
+         title        = "Multivariate quantile mapping bias correction: An N-dimensional probability density function transform for climate model simulations of multiple variables",
+         author       = "Alex J. Cannon",
+         year         = "submitted",
+         journal      = "Climate Dynamics",
+         volume       = "",
+         pages        = "",
+         doi          = "",
+         textVersion  = "Cannon, A.J., submitted. Multivariate quantile mapping bias correction: An N-dimensional probability density function transform for climate model simulations of multiple variables. Climate Dynamics."
+)
+
+citEntry(entry="Article",
+         title        = "Multivariate bias correction of climate model outputs: Matching marginal distributons and inter-variable dependence structure",
+         author       = "Alex J. Cannon",
+         year         = "2016",
+         journal      = "Journal of Climate",
+         volume       = "29",
+         pages        = "7045-7064",
+         doi          = "10.1175/JCLI-D-15-0679.1",
+         textVersion  = "Cannon, A.J., 2016. Multivariate bias correction of climate model outputs: Matching marginal distributons and inter-variable dependence structure. Journal of Climate, 29:7045-7064. doi:10.1175/JCLI-D-15-0679.1"
+)
+
+citEntry(entry="Article",
+         title        = "Bias correction of GCM precipitation by quantile mapping: How well do methods preserve changes in quantiles and extremes?",
+         author       = "Alex J. Cannon, S. R. Sobie, and T. Q. Murdock",
+         year         = "2015",
+         journal      = "Journal of Climate",
+         volume       = "28",
+         pages        = "6938-6959",
+         doi          = "10.1175/JCLI-D-14-00754.1",
+         textVersion  = "Cannon, A.J., S.R. Sobie, and T.Q. Murdock, 2015. Bias correction of simulated precipitation by quantile mapping: How well do methods preserve relative changes in quantiles and extremes? Journal of Climate, 28:6938-6959. doi:10.1175/JCLI-D-14-00754.1"
+)

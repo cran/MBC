@@ -1,0 +1,12 @@
+# Export all names
+export(MRS)
+export(MBCr)
+export(MBCp)
+export(MBCn)
+export(QDM)
+export(rot.random)
+export(escore)
+importFrom("energy", "edist")
+importFrom("Matrix", "nearPD")
+importFrom("stats", "approx", "cor", "cov", "quantile", "rnorm", "runif", "sd")
+

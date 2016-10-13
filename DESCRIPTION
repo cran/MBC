@@ -1,0 +1,15 @@
+Package: MBC
+Version: 0.1
+Title: Multivariate Bias Correction of Climate Model Outputs
+Author: Alex J. Cannon
+Maintainer: Alex J. Cannon <alex.cannon@canada.ca>
+Description: Calibrate and apply multivariate bias correction algorithms
+    for climate model simulations of multiple climate variables. Three methods
+    by Cannon (2016, submitted) are supported: MBCp, MBCr, and MBCn.
+License: GPL-2
+Depends: R (>= 2.10), Matrix, energy
+Encoding: UTF-8
+NeedsCompilation: no
+Packaged: 2016-10-12 21:29:31 UTC; ECPACIFIC+cannona
+Repository: CRAN
+Date/Publication: 2016-10-13 20:36:53
