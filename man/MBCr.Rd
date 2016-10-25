@@ -13,7 +13,7 @@ MBCr(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
      ratio.seq=rep(FALSE, ncol(o.c)), trace=0.05,
      trace.calc=0.5*trace, jitter.factor=0, n.tau=NULL,
      ratio.max=2, ratio.max.trace=10*trace, ties='first',
-     qmap.precalc=FALSE, silent=FALSE)
+     qmap.precalc=FALSE, silent=FALSE, subsample=NULL)
 }
 \arguments{
   \item{o.c}{
@@ -60,6 +60,10 @@ MBCr(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
   }
   \item{silent}{
       logical value indicating if algorithm progress should be reported.
+  }
+  \item{subsample}{
+      use \code{subsample} draws of size \code{n.tau} to calculate empirical
+      quantiles; if \code{NULL}, calculate normally.
   }
 }
 \value{

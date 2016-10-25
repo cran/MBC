@@ -19,7 +19,7 @@ QDM <-
 #  28: 6938-6959. doi:10.1175/JCLI-D-14-00754.1
 function(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
          jitter.factor=0, n.tau=NULL, ratio.max=2, ratio.max.trace=10*trace,
-         ECBC=FALSE, ties='first'){
+         ECBC=FALSE, ties='first', subsample=NULL){
     # o = vector of observed values; m = vector of modelled values
     # c = current period;  p = projected period
     # ratio = TRUE --> preserve relative trends in a ratio variable
@@ -30,7 +30,9 @@ function(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
     # ratio.max = 2 --> maximum delta when values are less than ratio.max.trace
     # ratio.max.trace = 10*trace --> values below which ratio.max is applied
     # ECBC = TRUE --> apply Schaake shuffle to enforce o.c temporal sequencing
-    # 
+    # subsample = NULL --> use this number of repeated subsamples of size n.tau
+    #  to calculate empirical quantiles (e.g., when o.c, m.c, and m.p are of
+    #  very different size)
     # tau.m-p = F.m-p(x.m-p)
     # delta.m = x.m-p {/,-} F.m-c^-1(tau.m-p)
     # xhat.m-p = F.o-c^-1(tau.m-p) {*,+} delta.m
@@ -57,9 +59,21 @@ function(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
     n <- length(m.p)
     if(is.null(n.tau)) n.tau <- n
     tau <- seq(0, 1, length=n.tau)
-    quant.o.c <- quantile(o.c, tau)
-    quant.m.c <- quantile(m.c, tau)
-    quant.m.p <- quantile(m.p, tau)
+    if(!is.null(subsample)){
+        quant.o.c <- rowMeans(apply(replicate(subsample,
+                              sample(o.c, size=length(tau))),
+                              2, quantile, probs=tau))
+        quant.m.c <- rowMeans(apply(replicate(subsample,
+                              sample(m.c, size=length(tau))),
+                              2, quantile, probs=tau))
+        quant.m.p <- rowMeans(apply(replicate(subsample,
+                              sample(m.p, size=length(tau))),
+                              2, quantile, probs=tau))
+    } else{
+        quant.o.c <- quantile(o.c, tau)
+        quant.m.c <- quantile(m.c, tau)
+        quant.m.p <- quantile(m.p, tau)
+    }
     # Apply quantile delta mapping bias correction
     tau.m.p <- approx(quant.m.p, tau, m.p, rule=2)$y    
     if(ratio){
@@ -110,9 +124,9 @@ function (x, y, scale.x = FALSE, n.cases = NULL, alpha = 1, method = "cluster")
             "scaled:scale"))
     }
     if (!is.null(n.cases)) {
-        cases <- sample(min(n.x, n.y), size = n.cases)
-        x <- x[cases,,drop = FALSE]
-        y <- y[cases,,drop = FALSE]
+        n.cases <- min(n.x, n.y, n.cases)
+        x <- x[sample(n.x, size = n.cases), , drop = FALSE]
+        y <- y[sample(n.y, size = n.cases), , drop = FALSE]
         n.x <- n.cases
         n.y <- n.cases
     }
@@ -175,7 +189,7 @@ function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
          ratio.seq=rep(FALSE, ncol(o.c)), trace=0.05,
          trace.calc=0.5*trace, jitter.factor=0, n.tau=NULL, ratio.max=2,
          ratio.max.trace=10*trace, ties='first', qmap.precalc=FALSE,
-         silent=FALSE){
+         silent=FALSE, subsample=NULL){
     if(length(trace.calc)==1)
         trace.calc <- rep(trace.calc, ncol(o.c))
     if(length(trace)==1)
@@ -195,7 +209,8 @@ function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
                             ratio=ratio.seq[i], trace.calc=trace.calc[i],
                             trace=trace[i], jitter.factor=jitter.factor[i],
                             n.tau=n.tau, ratio.max=ratio.max[i],
-                            ratio.max.trace=ratio.max.trace[i])
+                            ratio.max.trace=ratio.max.trace[i],
+                            subsample=subsample)
             m.c.qmap[,i] <- fit.qmap$mhat.c
             m.p.qmap[,i] <- fit.qmap$mhat.p
         }
@@ -251,7 +266,7 @@ MBCp <-
 function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
          ratio.seq=rep(FALSE, ncol(o.c)), trace=0.05, trace.calc=0.5*trace,
          jitter.factor=0, n.tau=NULL, ratio.max=2, ratio.max.trace=10*trace,
-         ties='first', qmap.precalc=FALSE, silent=FALSE){
+         ties='first', qmap.precalc=FALSE, silent=FALSE, subsample=NULL){
     if(length(trace.calc)==1)
         trace.calc <- rep(trace.calc, ncol(o.c))
     if(length(trace)==1)
@@ -271,7 +286,8 @@ function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
                             ratio=ratio.seq[i], trace.calc=trace.calc[i],
                             trace=trace[i], jitter.factor=jitter.factor[i],
                             n.tau=n.tau, ratio.max=ratio.max[i],
-                            ratio.max.trace=ratio.max.trace[i])
+                            ratio.max.trace=ratio.max.trace[i],
+                            subsample=subsample)
             m.c.qmap[,i] <- fit.qmap$mhat.c
             m.p.qmap[,i] <- fit.qmap$mhat.p
         }
@@ -347,7 +363,7 @@ function(o.c, m.c, m.p, iter=30, ratio.seq=rep(FALSE, ncol(o.c)),
          trace=0.05, trace.calc=0.5*trace, jitter.factor=0, n.tau=NULL,
          ratio.max=2, ratio.max.trace=10*trace, ties='first',
          qmap.precalc=FALSE, rot.seq=NULL, silent=FALSE, n.escore=0,
-         return.all=FALSE){
+         return.all=FALSE, subsample=NULL){
     if(!is.null(rot.seq)){
         if(length(rot.seq)!=iter){
             stop('length(rot.seq) != iter')
@@ -385,7 +401,8 @@ function(o.c, m.c, m.p, iter=30, ratio.seq=rep(FALSE, ncol(o.c)),
                             ratio=ratio.seq[i], trace.calc=trace.calc[i],
                             trace=trace[i], jitter.factor=jitter.factor[i],
                             n.tau=n.tau, ratio.max=ratio.max[i],
-                            ratio.max.trace=ratio.max.trace[i])
+                            ratio.max.trace=ratio.max.trace[i],
+                            subsample=subsample)
             m.c.qmap[,i] <- fit.qmap$mhat.c
             m.p.qmap[,i] <- fit.qmap$mhat.p
         }

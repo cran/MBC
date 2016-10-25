@@ -1,5 +1,5 @@
 Package: MBC
-Version: 0.1
+Version: 0.10-1
 Title: Multivariate Bias Correction of Climate Model Outputs
 Author: Alex J. Cannon
 Maintainer: Alex J. Cannon <alex.cannon@canada.ca>
@@ -10,6 +10,6 @@ License: GPL-2
 Depends: R (>= 2.10), Matrix, energy
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2016-10-12 21:29:31 UTC; ECPACIFIC+cannona
+Packaged: 2016-10-25 16:38:40 UTC; ECPACIFIC+cannona
 Repository: CRAN
-Date/Publication: 2016-10-13 20:36:53
+Date/Publication: 2016-10-25 23:03:51
