@@ -347,18 +347,22 @@ function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
 
 rot.random <-
 # Random orthogonal rotation
-function(k){
-    rot <- qr.Q(qr(matrix(rnorm(k*k), ncol=k)))
-    if(determinant(rot)$sign == -1)
-        rot[,1:2] <- rot[,2:1]
-    return(rot)
+function(k) {
+  rand <- matrix(rnorm(k * k), ncol=k)
+  QRd <- qr(rand)
+  Q <- qr.Q(QRd)
+  R <- qr.R(QRd)
+  diagR <- diag(R)
+  rot <- Q %*% diag(diagR/abs(diagR))
+  return(rot)
 }
 
 MBCn <- 
 # Multivariate quantile mapping bias correction (N-dimensional pdf transfer)
-# Cannon, A.J., submitted. Multivariate quantile mapping bias correction: An 
+# Cannon, A.J., 2017. Multivariate quantile mapping bias correction: An 
 #  N-dimensional probability density function transform for climate model
 #  simulations of multiple variables. Climate Dynamics.
+#  doi:10.1007/s00382-017-3580-6
 function(o.c, m.c, m.p, iter=30, ratio.seq=rep(FALSE, ncol(o.c)),
          trace=0.05, trace.calc=0.5*trace, jitter.factor=0, n.tau=NULL,
          ratio.max=2, ratio.max.trace=10*trace, ties='first',

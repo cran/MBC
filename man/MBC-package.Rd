@@ -8,19 +8,23 @@ Multivariate Bias Correction of Climate Model Outputs
 \description{
 Calibrate and apply multivariate bias correction
 algorithms for climate model simulations of multiple
-climate variables. Three methods are supported:
-MBCp, MBCr, and MBCn. The first two, MBCp and MBCr
+climate variables. Three methods are supported: (1) MBC
+Pearson correlation (MBCp), (2) MBC rank correlation (MBCr),
+and (3) MBC N-dimensional probability density function
+transform (MBCn). The first two, MBCp and MBCr
 (Cannon, 2016), match marginal distributions and inter-variable
 dependence structure. Dependence structure can be measured
 either by the Pearson correlation (\code{\link{MBCp}})
 or by the Spearman rank correlation (\code{\link{MBCr}}).
 The energy distance score (\code{\link{escore}}) is recommended
-for model selection. The third, \code{\link{MBCn}} (Cannon, submitted),
-is more flexible, operating on the full multivariate distribution.
-All aspects of the observed distribution are transferred to the
-climate model simulations. In each of the three methods, marginal
-distributions are corrected by the change-preserving quantile
-delta mapping (\code{\link{QDM}}) algorithm (Cannon et al., 2015).
+for model selection. The third, \code{\link{MBCn}} (Cannon, 2017),
+which operates on the full multivariate distribution, is more
+flexible and can be considered to be a multivariate analogue
+of univariate quantile mapping. All aspects of the observed
+distribution are transferred to the climate model simulations.
+In each of the three methods, marginal distributions are corrected
+by the change-preserving quantile delta mapping (\code{\link{QDM}})
+algorithm (Cannon et al., 2015).
 
 An example application of the three methods using the \code{cccma}
 dataset can be run via:
@@ -46,11 +50,12 @@ Alex J. Cannon
 Maintainer: Alex J. Cannon <alex.cannon@canada.ca>
 }
 \references{
-Cannon, A.J., submitted. Multivariate quantile mapping bias correction: An 
+Cannon, A.J., 2017. Multivariate quantile mapping bias correction: An 
 N-dimensional probability density function transform for climate model
 simulations of multiple variables. Climate Dynamics.
+doi:10.1007/s00382-017-3580-6
 
-Cannon, A.J., 2016. Multivariate bias correction of climate model outputs:
+Cannon, A.J., 2016. Multivariate bias correction of climate model output:
 Matching marginal distributions and inter-variable dependence structure.
 Journal of Climate, 29:7045-7064. doi:10.1175/JCLI-D-15-0679.1
 

@@ -4,7 +4,7 @@
 Random orthogonal rotation
 }
 \description{
-Generate a \code{k}-dimensional uniform random orthogonal rotation matrix.
+Generate a \code{k}-dimensional random orthogonal rotation matrix.
 }
 \usage{
 rot.random(k)

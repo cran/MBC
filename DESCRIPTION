@@ -1,15 +1,18 @@
 Package: MBC
-Version: 0.10-1
+Version: 0.10-2
 Title: Multivariate Bias Correction of Climate Model Outputs
 Author: Alex J. Cannon
 Maintainer: Alex J. Cannon <alex.cannon@canada.ca>
 Description: Calibrate and apply multivariate bias correction algorithms
     for climate model simulations of multiple climate variables. Three methods
-    by Cannon (2016, submitted) are supported: MBCp, MBCr, and MBCn.
+    described by Cannon (2016) <doi:10.1175/JCLI-D-15-0679.1> and 
+    Cannon (2017) <doi:10.1007/s00382-017-3580-6> are implemented:
+    1) MBC Pearson correlation (MBCp), 2) MBC rank correlation (MBCr),
+    and 3) MBC N-dimensional PDF transform (MBCn).
 License: GPL-2
 Depends: R (>= 2.10), Matrix, energy
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2016-10-25 16:38:40 UTC; ECPACIFIC+cannona
+Packaged: 2017-03-27 16:45:42 UTC; ECPACIFIC+cannona
 Repository: CRAN
-Date/Publication: 2016-10-25 23:03:51
+Date/Publication: 2017-03-28 06:11:47 UTC

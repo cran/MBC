@@ -76,7 +76,7 @@ MBCp(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
 \code{\link{QDM}, \link{MBCr}, \link{MRS}, \link{MBCn} \link{escore}}
 }
 \references{
-Cannon, A.J., 2016. Multivariate bias correction of climate model outputs:
+Cannon, A.J., 2016. Multivariate bias correction of climate model output:
 Matching marginal distributions and inter-variable dependence structure.
 Journal of Climate, 29:7045-7064. doi:10.1175/JCLI-D-15-0679.1
 
