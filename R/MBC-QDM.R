@@ -19,7 +19,7 @@ QDM <-
 #  28: 6938-6959. doi:10.1175/JCLI-D-14-00754.1
 function(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
          jitter.factor=0, n.tau=NULL, ratio.max=2, ratio.max.trace=10*trace,
-         ECBC=FALSE, ties='first', subsample=NULL){
+         ECBC=FALSE, ties='first', subsample=NULL, pp.type=7){
     # o = vector of observed values; m = vector of modelled values
     # c = current period;  p = projected period
     # ratio = TRUE --> preserve relative trends in a ratio variable
@@ -33,6 +33,7 @@ function(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
     # subsample = NULL --> use this number of repeated subsamples of size n.tau
     #  to calculate empirical quantiles (e.g., when o.c, m.c, and m.p are of
     #  very different size)
+    # pp.type = 7 --> plotting position type used in quantile
     # tau.m-p = F.m-p(x.m-p)
     # delta.m = x.m-p {/,-} F.m-c^-1(tau.m-p)
     # xhat.m-p = F.o-c^-1(tau.m-p) {*,+} delta.m
@@ -62,17 +63,17 @@ function(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
     if(!is.null(subsample)){
         quant.o.c <- rowMeans(apply(replicate(subsample,
                               sample(o.c, size=length(tau))),
-                              2, quantile, probs=tau))
+                              2, quantile, probs=tau, type=pp.type))
         quant.m.c <- rowMeans(apply(replicate(subsample,
                               sample(m.c, size=length(tau))),
-                              2, quantile, probs=tau))
+                              2, quantile, probs=tau, type=pp.type))
         quant.m.p <- rowMeans(apply(replicate(subsample,
                               sample(m.p, size=length(tau))),
-                              2, quantile, probs=tau))
+                              2, quantile, probs=tau, type=pp.type))
     } else{
-        quant.o.c <- quantile(o.c, tau)
-        quant.m.c <- quantile(m.c, tau)
-        quant.m.p <- quantile(m.p, tau)
+        quant.o.c <- quantile(o.c, tau, type=pp.type)
+        quant.m.c <- quantile(m.c, tau, type=pp.type)
+        quant.m.p <- quantile(m.p, tau, type=pp.type)
     }
     # Apply quantile delta mapping bias correction
     tau.m.p <- approx(quant.m.p, tau, m.p, rule=2)$y    
@@ -189,7 +190,7 @@ function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
          ratio.seq=rep(FALSE, ncol(o.c)), trace=0.05,
          trace.calc=0.5*trace, jitter.factor=0, n.tau=NULL, ratio.max=2,
          ratio.max.trace=10*trace, ties='first', qmap.precalc=FALSE,
-         silent=FALSE, subsample=NULL){
+         silent=FALSE, subsample=NULL, pp.type=7){
     if(length(trace.calc)==1)
         trace.calc <- rep(trace.calc, ncol(o.c))
     if(length(trace)==1)
@@ -210,7 +211,7 @@ function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
                             trace=trace[i], jitter.factor=jitter.factor[i],
                             n.tau=n.tau, ratio.max=ratio.max[i],
                             ratio.max.trace=ratio.max.trace[i],
-                            subsample=subsample)
+                            subsample=subsample, pp.type=pp.type)
             m.c.qmap[,i] <- fit.qmap$mhat.c
             m.p.qmap[,i] <- fit.qmap$mhat.p
         }
@@ -266,7 +267,8 @@ MBCp <-
 function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
          ratio.seq=rep(FALSE, ncol(o.c)), trace=0.05, trace.calc=0.5*trace,
          jitter.factor=0, n.tau=NULL, ratio.max=2, ratio.max.trace=10*trace,
-         ties='first', qmap.precalc=FALSE, silent=FALSE, subsample=NULL){
+         ties='first', qmap.precalc=FALSE, silent=FALSE, subsample=NULL,
+         pp.type=7){
     if(length(trace.calc)==1)
         trace.calc <- rep(trace.calc, ncol(o.c))
     if(length(trace)==1)
@@ -287,7 +289,7 @@ function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
                             trace=trace[i], jitter.factor=jitter.factor[i],
                             n.tau=n.tau, ratio.max=ratio.max[i],
                             ratio.max.trace=ratio.max.trace[i],
-                            subsample=subsample)
+                            subsample=subsample, pp.type=pp.type)
             m.c.qmap[,i] <- fit.qmap$mhat.c
             m.p.qmap[,i] <- fit.qmap$mhat.p
         }
@@ -309,7 +311,7 @@ function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
         m.p <- fit.mbc$mhat.p
         for(j in seq(ncol(o.c))){
             fit.qmap <- QDM(o.c=o.c[,j], m.c=m.c[,j], m.p=m.p[,j], ratio=FALSE,
-                            n.tau=n.tau)
+                            n.tau=n.tau, pp.type=pp.type)
             m.c[,j] <- fit.qmap$mhat.c
             m.p[,j] <- fit.qmap$mhat.p
         }
@@ -367,7 +369,7 @@ function(o.c, m.c, m.p, iter=30, ratio.seq=rep(FALSE, ncol(o.c)),
          trace=0.05, trace.calc=0.5*trace, jitter.factor=0, n.tau=NULL,
          ratio.max=2, ratio.max.trace=10*trace, ties='first',
          qmap.precalc=FALSE, rot.seq=NULL, silent=FALSE, n.escore=0,
-         return.all=FALSE, subsample=NULL){
+         return.all=FALSE, subsample=NULL, pp.type=7){
     if(!is.null(rot.seq)){
         if(length(rot.seq)!=iter){
             stop('length(rot.seq) != iter')
@@ -406,7 +408,7 @@ function(o.c, m.c, m.p, iter=30, ratio.seq=rep(FALSE, ncol(o.c)),
                             trace=trace[i], jitter.factor=jitter.factor[i],
                             n.tau=n.tau, ratio.max=ratio.max[i],
                             ratio.max.trace=ratio.max.trace[i],
-                            subsample=subsample)
+                            subsample=subsample, pp.type=pp.type)
             m.c.qmap[,i] <- fit.qmap$mhat.c
             m.p.qmap[,i] <- fit.qmap$mhat.p
         }
@@ -449,7 +451,7 @@ function(o.c, m.c, m.p, iter=30, ratio.seq=rep(FALSE, ncol(o.c)),
         for(j in seq(ncol(Z))){
             Z.qdm <- QDM(o.c=Z.o.c[,j], m.c=Z.m.c[,j], m.p=Z.m.p[,j],
                          ratio=FALSE, jitter.factor=jitter.factor[j],
-                         n.tau=n.tau)
+                         n.tau=n.tau, pp.type=pp.type)
             Z.m.c[,j] <- Z.qdm$mhat.c
             Z.m.p[,j] <- Z.qdm$mhat.p
         }

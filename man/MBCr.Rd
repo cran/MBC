@@ -13,7 +13,8 @@ MBCr(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
      ratio.seq=rep(FALSE, ncol(o.c)), trace=0.05,
      trace.calc=0.5*trace, jitter.factor=0, n.tau=NULL,
      ratio.max=2, ratio.max.trace=10*trace, ties='first',
-     qmap.precalc=FALSE, silent=FALSE, subsample=NULL)
+     qmap.precalc=FALSE, silent=FALSE, subsample=NULL,
+     pp.type=7)
 }
 \arguments{
   \item{o.c}{
@@ -64,6 +65,9 @@ MBCr(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
   \item{subsample}{
       use \code{subsample} draws of size \code{n.tau} to calculate empirical
       quantiles; if \code{NULL}, calculate normally.
+  }
+  \item{pp.type}{
+      type of plotting position used in \code{quantile}.
   }
 }
 \value{

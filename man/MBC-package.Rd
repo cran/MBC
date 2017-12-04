@@ -8,9 +8,9 @@ Multivariate Bias Correction of Climate Model Outputs
 \description{
 Calibrate and apply multivariate bias correction
 algorithms for climate model simulations of multiple
-climate variables. Three methods are supported: (1) MBC
-Pearson correlation (MBCp), (2) MBC rank correlation (MBCr),
-and (3) MBC N-dimensional probability density function
+climate variables. Three methods are supported: (i) MBC
+Pearson correlation (MBCp), (ii) MBC rank correlation (MBCr),
+and (iii) MBC N-dimensional probability density function
 transform (MBCn). The first two, MBCp and MBCr
 (Cannon, 2016), match marginal distributions and inter-variable
 dependence structure. Dependence structure can be measured
@@ -44,11 +44,7 @@ License: \tab GPL-2\cr
 LazyLoad: \tab yes\cr
 }
 }
-\author{
-Alex J. Cannon
 
-Maintainer: Alex J. Cannon <alex.cannon@canada.ca>
-}
 \references{
 Cannon, A.J., 2017. Multivariate quantile mapping bias correction: An 
 N-dimensional probability density function transform for climate model

@@ -13,7 +13,7 @@ be preserved following bias correction by quantile mapping.
 QDM(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
     jitter.factor=0, n.tau=NULL, ratio.max=2,
     ratio.max.trace=10*trace, ECBC=FALSE, ties='first',
-    subsample=NULL)
+    subsample=NULL, pp.type=7)
 }
 \arguments{
   \item{o.c}{
@@ -55,6 +55,9 @@ QDM(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
   \item{subsample}{
       use \code{subsample} draws of size \code{n.tau} to calculate empirical
       quantiles; if \code{NULL}, calculate normally.
+  }
+  \item{pp.type}{
+      type of plotting position used in \code{quantile}.
   }
 }
 \value{
