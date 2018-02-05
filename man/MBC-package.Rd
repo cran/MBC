@@ -17,7 +17,7 @@ dependence structure. Dependence structure can be measured
 either by the Pearson correlation (\code{\link{MBCp}})
 or by the Spearman rank correlation (\code{\link{MBCr}}).
 The energy distance score (\code{\link{escore}}) is recommended
-for model selection. The third, \code{\link{MBCn}} (Cannon, 2017),
+for model selection. The third, \code{\link{MBCn}} (Cannon, 2018),
 which operates on the full multivariate distribution, is more
 flexible and can be considered to be a multivariate analogue
 of univariate quantile mapping. All aspects of the observed
@@ -46,9 +46,9 @@ LazyLoad: \tab yes\cr
 }
 
 \references{
-Cannon, A.J., 2017. Multivariate quantile mapping bias correction: An 
+Cannon, A.J., 2018. Multivariate quantile mapping bias correction: An 
 N-dimensional probability density function transform for climate model
-simulations of multiple variables. Climate Dynamics.
+simulations of multiple variables. Climate Dynamics, 50(1-2):31-49.
 doi:10.1007/s00382-017-3580-6
 
 Cannon, A.J., 2016. Multivariate bias correction of climate model output:

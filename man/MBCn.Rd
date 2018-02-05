@@ -7,7 +7,7 @@ Multivariate bias correction (N-pdft)
 Multivariate bias correction that matches the multivariate
 distribution using \code{\link{QDM}} and the N-dimensional
 probability density function transform (N-pdft) following
-Cannon (2017).
+Cannon (2018).
 }
 \usage{
 MBCn(o.c, m.c, m.p, iter=30, ratio.seq=rep(FALSE, ncol(o.c)),
@@ -89,10 +89,10 @@ MBCn(o.c, m.c, m.p, iter=30, ratio.seq=rep(FALSE, ncol(o.c)),
 \code{\link{QDM}, \link{MBCp}, \link{MBCr}, \link{MRS}, \link{escore}, \link{rot.random}}
 }
 \references{
-Cannon, A.J., 2017. Multivariate quantile mapping bias correction: An 
+Cannon, A.J., 2018. Multivariate quantile mapping bias correction: An 
 N-dimensional probability density function transform for climate model
-simulations of multiple variables.
-Climate Dynamics. doi:10.1007/s00382-017-3580-6
+simulations of multiple variables. Climate Dynamics, 50(1-2):31-49.
+doi:10.1007/s00382-017-3580-6
 
 Cannon, A.J., S.R. Sobie, and T.Q. Murdock, 2015. Bias correction
 of simulated precipitation by quantile mapping: How well do methods

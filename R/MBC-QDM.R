@@ -40,6 +40,12 @@ function(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
     #
     # If jitter.factor > 0, apply a small amount of jitter to accommodate ties
     # due to limited measurement precision
+    if(jitter.factor==0 && 
+      (length(unique(o.c))==1 ||
+       length(unique(m.c))==1 ||
+       length(unique(m.p))==1)){
+        jitter.factor <- sqrt(.Machine$double.eps)
+    }
     if(jitter.factor > 0){
         o.c <- jitter(o.c, jitter.factor)
         m.c <- jitter(m.c, jitter.factor)

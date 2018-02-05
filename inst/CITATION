@@ -3,12 +3,12 @@ citHeader("To cite package 'MBC' in publications use:")
 citEntry(entry="Article",
          title        = "Multivariate quantile mapping bias correction: An N-dimensional probability density function transform for climate model simulations of multiple variables",
          author       = "Alex J. Cannon",
-         year         = "2017",
+         year         = "2018",
          journal      = "Climate Dynamics",
-         volume       = "",
-         pages        = "",
+         volume       = "50(1-2)",
+         pages        = "31-49",
          doi          = "10.1007/s00382-017-3580-6",
-         textVersion  = "Cannon, A.J., 2017. Multivariate quantile mapping bias correction: An N-dimensional probability density function transform for climate model simulations of multiple variables. Climate Dynamics. doi:10.1007/s00382-017-3580-6"
+         textVersion  = "Cannon, A.J., 2018. Multivariate quantile mapping bias correction: An N-dimensional probability density function transform for climate model simulations of multiple variables. Climate Dynamics, 50(1-2):31-49. doi:10.1007/s00382-017-3580-6"
 )
 
 citEntry(entry="Article",
