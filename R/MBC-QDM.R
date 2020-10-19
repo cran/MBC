@@ -8,6 +8,7 @@
 
 library(Matrix)
 library(energy)
+library(FNN)
 
 QDM <-
 # Quantile delta mapping bias correction for preserving changes in quantiles
@@ -203,7 +204,7 @@ function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
         trace <- rep(trace, ncol(o.c))
     if(length(jitter.factor)==1)
         jitter.factor <- rep(jitter.factor, ncol(o.c))
-    if(length(ratio.max))
+    if(length(ratio.max) == 1)
         ratio.max <- rep(ratio.max, ncol(o.c))
     if(length(ratio.max.trace)==1)
         ratio.max.trace <- rep(ratio.max.trace, ncol(o.c))
@@ -281,7 +282,7 @@ function(o.c, m.c, m.p, iter=20, cor.thresh=1e-4,
         trace <- rep(trace, ncol(o.c))
     if(length(jitter.factor)==1)
         jitter.factor <- rep(jitter.factor, ncol(o.c))
-    if(length(ratio.max))
+    if(length(ratio.max) == 1)
         ratio.max <- rep(ratio.max, ncol(o.c))
     if(length(ratio.max.trace)==1)
         ratio.max.trace <- rep(ratio.max.trace, ncol(o.c))
@@ -367,9 +368,9 @@ function(k) {
 
 MBCn <- 
 # Multivariate quantile mapping bias correction (N-dimensional pdf transfer)
-# Cannon, A.J., 2017. Multivariate quantile mapping bias correction: An 
+# Cannon, A.J., 2018. Multivariate quantile mapping bias correction: An 
 #  N-dimensional probability density function transform for climate model
-#  simulations of multiple variables. Climate Dynamics.
+#  simulations of multiple variables. Climate Dynamics, 50(1-2):31-49.
 #  doi:10.1007/s00382-017-3580-6
 function(o.c, m.c, m.p, iter=30, ratio.seq=rep(FALSE, ncol(o.c)),
          trace=0.05, trace.calc=0.5*trace, jitter.factor=0, n.tau=NULL,
@@ -387,7 +388,7 @@ function(o.c, m.c, m.p, iter=30, ratio.seq=rep(FALSE, ncol(o.c)),
         trace <- rep(trace, ncol(o.c))
     if(length(jitter.factor)==1)
         jitter.factor <- rep(jitter.factor, ncol(o.c))
-    if(length(ratio.max))
+    if(length(ratio.max) == 1)
         ratio.max <- rep(ratio.max, ncol(o.c))
     if(length(ratio.max.trace)==1)
         ratio.max.trace <- rep(ratio.max.trace, ncol(o.c))
@@ -492,6 +493,71 @@ function(o.c, m.c, m.p, iter=30, ratio.seq=rep(FALSE, ncol(o.c)),
     names(escore.iter)[1:2] <- c('RAW', 'QM')
     names(escore.iter)[-c(1:2)] <- seq(iter)
     list(mhat.c=m.c, mhat.p=m.p, escore.iter=escore.iter, m.iter=m.iter)
+}
+
+################################################################################
+# Multivariate bias correction based on application of the nearest
+# neighbour algorithm to ordinal ranks.
+# Vrac, M., 2018. Multivariate bias adjustment of high-dimensional climate
+#   simulations: the Rank Resampling for Distributions and Dependences (R2D2)
+#   bias correction. Hydrology and Earth System Sciences, 22:3175-3196.
+#   doi:10.5194/hess-22-3175-2018
+
+R2D2 <-
+# Vrac et al., (2018)
+function(o.c, m.c, m.p, ref.column = 1, ratio.seq = rep(FALSE,
+    ncol(o.c)), trace = 0.05, trace.calc = 0.5 * trace, jitter.factor = 0,
+    n.tau = NULL, ratio.max = 2, ratio.max.trace = 10 * trace,
+    ties = "first", qmap.precalc = FALSE, subsample = NULL,
+    pp.type = 7)
+{
+    if ((length(o.c) != length(m.c)) || (length(o.c) != length(m.p))){
+        stop("R2D2 requires data samples of equal length")
+    }
+    if (length(trace.calc) == 1)
+        trace.calc <- rep(trace.calc, ncol(o.c))
+    if (length(trace) == 1)
+        trace <- rep(trace, ncol(o.c))
+    if (length(jitter.factor) == 1)
+        jitter.factor <- rep(jitter.factor, ncol(o.c))
+    if (length(ratio.max) == 1)
+        ratio.max <- rep(ratio.max, ncol(o.c))
+    if (length(ratio.max.trace) == 1)
+        ratio.max.trace <- rep(ratio.max.trace, ncol(o.c))
+    m.c.qmap <- m.c
+    m.p.qmap <- m.p
+    if (!qmap.precalc) {
+        for (i in seq(ncol(o.c))) {
+            fit.qmap <- QDM(o.c = o.c[, i], m.c = m.c[, i], m.p = m.p[,
+                i], ratio = ratio.seq[i], trace.calc = trace.calc[i],
+                trace = trace[i], jitter.factor = jitter.factor[i],
+                n.tau = n.tau, ratio.max = ratio.max[i],
+                ratio.max.trace = ratio.max.trace[i],
+                subsample = subsample, pp.type = pp.type)
+            m.c.qmap[, i] <- fit.qmap$mhat.c
+            m.p.qmap[, i] <- fit.qmap$mhat.p
+        }
+    }
+    # Calculate ordinal ranks of observations and m.c.qmap and m.p.qmap
+    o.c.r <- apply(o.c, 2, rank, ties.method = ties)
+    m.c.r <- apply(m.c.qmap, 2, rank, ties.method = ties)
+    m.p.r <- apply(m.p.qmap, 2, rank, ties.method = ties)
+    # 1D rank analog selection based on ref.column
+    nn.c.r <- rank(knnx.index(o.c.r[,ref.column],
+                   query=m.c.r[,ref.column], k=1), ties.method='random')
+    nn.p.r <- rank(knnx.index(o.c.r[,ref.column],
+                   query=m.p.r[,ref.column], k=1), ties.method='random')
+    # Shuffle o.c.r ranks based on 1D rank analogs
+    new.c.r <- o.c.r[nn.c.r,,drop=FALSE]
+    new.p.r <- o.c.r[nn.p.r,,drop=FALSE]
+    # Reorder m.c.qmap and m.p.qmap
+    r2d2.c <- m.c.qmap
+    r2d2.p <- m.p.qmap
+    for (i in seq(ncol(o.c))) {
+        r2d2.c[,i] <- sort(r2d2.c[,i])[new.c.r[,i]]
+        r2d2.p[,i] <- sort(r2d2.p[,i])[new.p.r[,i]]
+    }    
+    list(mhat.c = r2d2.c, mhat.p = r2d2.p)
 }
 
 ################################################################################

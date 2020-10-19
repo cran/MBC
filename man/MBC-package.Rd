@@ -8,7 +8,7 @@ Multivariate Bias Correction of Climate Model Outputs
 \description{
 Calibrate and apply multivariate bias correction
 algorithms for climate model simulations of multiple
-climate variables. Three methods are supported: (i) MBC
+climate variables. Three iterative methods are supported: (i) MBC
 Pearson correlation (MBCp), (ii) MBC rank correlation (MBCr),
 and (iii) MBC N-dimensional probability density function
 transform (MBCn). The first two, MBCp and MBCr
@@ -24,10 +24,12 @@ of univariate quantile mapping. All aspects of the observed
 distribution are transferred to the climate model simulations.
 In each of the three methods, marginal distributions are corrected
 by the change-preserving quantile delta mapping (\code{\link{QDM}})
-algorithm (Cannon et al., 2015).
+algorithm (Cannon et al., 2015). Finally, an implementation
+of the Rank Resampling for Distributions and Dependences (R2D2)
+method introduced by Vrac (2018) is also included.
 
-An example application of the three methods using the \code{cccma}
-dataset can be run via:
+An example application of the three MBC methods using the
+\code{cccma} dataset can be run via:
 
 \code{example(MBC, run.dontrun=TRUE)}
 
@@ -59,11 +61,22 @@ Cannon, A.J., S.R. Sobie, and T.Q. Murdock, 2015. Bias correction
 of simulated precipitation by quantile mapping: How well do methods
 preserve relative changes in quantiles and extremes? Journal of
 Climate, 28:6938-6959. doi:10.1175/JCLI-D-14-00754.1
+
+Francois, B., M. Vrac, A.J. Cannon, Y. Robin, and D. Allard, 2020.
+Multivariate bias corrections of climate simulations: Which benefits
+for which losses? Earth System Dynamics, 11:537-562.
+doi:10.5194/esd-11-537-2020
+
+Vrac, M., 2018. Multivariate bias adjustment of high-dimensional
+climate simulations: the Rank Resampling for Distributions and
+Dependences (R2D2) bias correction. Hydrology and Earth System
+Sciences, 22:3175-3196. doi:10.5194/hess-22-3175-2018
+
 }
 \keyword{ package }
 
 \seealso{
-\code{\link{QDM}, \link{MBCp}, \link{MBCr}, \link{MBCn}, \link{escore}, \link{rot.random}, \link{cccma}}
+\code{\link{QDM}, \link{MBCp}, \link{MBCr}, \link{MBCn}, \link{R2D2}, \link{escore}, \link{rot.random}, \link{cccma}}
 }
 
 
