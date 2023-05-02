@@ -83,18 +83,23 @@ function(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
         quant.m.p <- quantile(m.p, tau, type=pp.type)
     }
     # Apply quantile delta mapping bias correction
-    tau.m.p <- approx(quant.m.p, tau, m.p, rule=2)$y    
+    tau.m.p <- approx(quant.m.p, tau, m.p, rule=2, ties='ordered')$y    
     if(ratio){
-        approx.t.qmc.tmp <- approx(tau, quant.m.c, tau.m.p, rule=2)$y
+        approx.t.qmc.tmp <- approx(tau, quant.m.c, tau.m.p, rule=2,
+                                   ties='ordered')$y
         delta.m <- m.p/approx.t.qmc.tmp
         delta.m[(delta.m > ratio.max) &
                 (approx.t.qmc.tmp < ratio.max.trace)] <- ratio.max
-        mhat.p <- approx(tau, quant.o.c, tau.m.p, rule=2)$y*delta.m
+        mhat.p <- approx(tau, quant.o.c, tau.m.p, rule=2,
+                         ties='ordered')$y*delta.m
     } else{
-        delta.m <- m.p - approx(tau, quant.m.c, tau.m.p, rule=2)$y
-        mhat.p <- approx(tau, quant.o.c, tau.m.p, rule=2)$y + delta.m
+        delta.m <- m.p - approx(tau, quant.m.c, tau.m.p, rule=2,
+                                ties='ordered')$y
+        mhat.p <- approx(tau, quant.o.c, tau.m.p, rule=2,
+                         ties='ordered')$y + delta.m
     }
-    mhat.c <- approx(quant.m.c, quant.o.c, m.c, rule=2)$y
+    mhat.c <- approx(quant.m.c, quant.o.c, m.c, rule=2,
+                     ties='ordered')$y
     # For ratio data, set values less than trace to zero
     if(ratio){
         mhat.c[mhat.c < trace] <- 0
