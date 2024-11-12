@@ -6,38 +6,47 @@
 Multivariate Bias Correction of Climate Model Outputs
 }
 \description{
-Calibrate and apply multivariate bias correction
-algorithms for climate model simulations of multiple
-climate variables. Three iterative methods are supported: (i) MBC
-Pearson correlation (MBCp), (ii) MBC rank correlation (MBCr),
-and (iii) MBC N-dimensional probability density function
-transform (MBCn). The first two, MBCp and MBCr
-(Cannon, 2016), match marginal distributions and inter-variable
-dependence structure. Dependence structure can be measured
-either by the Pearson correlation (\code{\link{MBCp}})
-or by the Spearman rank correlation (\code{\link{MBCr}}).
-The energy distance score (\code{\link{escore}}) is recommended
-for model selection. The third, \code{\link{MBCn}} (Cannon, 2018),
-which operates on the full multivariate distribution, is more
-flexible and can be considered to be a multivariate analogue
-of univariate quantile mapping. All aspects of the observed
-distribution are transferred to the climate model simulations.
-In each of the three methods, marginal distributions are corrected
-by the change-preserving quantile delta mapping (\code{\link{QDM}})
-algorithm (Cannon et al., 2015). Finally, an implementation
-of the Rank Resampling for Distributions and Dependences (R2D2)
-method introduced by Vrac (2018) is also included.
+Calibrate and apply multivariate bias correction algorithms for climate model
+simulations of multiple climate variables. Three iterative methods are
+supported: (i) MBC Pearson correlation (MBCp), (ii) MBC rank correlation (MBCr),
+and (iii) MBC N-dimensional probability density function transform (MBCn). 
 
-An example application of the three MBC methods using the
-\code{cccma} dataset can be run via:
+The first two, MBCp and MBCr (Cannon, 2016), match marginal distributions
+and inter-variable dependence structure. Dependence structure can be measured
+either by the Pearson correlation (\code{\link{MBCp}}) or by the Spearman rank
+correlation (\code{\link{MBCr}}). The energy distance score
+(\code{\link{escore}}) is recommended for model selection.
+
+The third, \code{\link{MBCn}} (Cannon, 2018), which operates on the full
+multivariate distribution, is more flexible and can be considered to be a
+multivariate analogue of univariate quantile mapping. All aspects of the
+observed distribution are transferred to the climate model simulations.
+
+In each of the three methods, marginal distributions are corrected by the
+change-preserving quantile delta mapping (\code{\link{QDM}}) algorithm
+(Cannon et al., 2015). Finally, an implementation of the Rank Resampling for
+Distributions and Dependences (R2D2) method introduced by Vrac (2018) is also
+included.
+
+An example application of the three MBC methods using the \code{cccma} dataset
+can be run via:
 
 \code{example(MBC, run.dontrun=TRUE)}
 
-Note: because empirical quantiles and their changes are used by
-\code{\link{QDM}}, sample sizes of the observed, model calibration,
-and model projection datasets should be approximately equal.
+Note: these functions apply bias correction to the supplied data without
+reference to other conditioning variables (e.g., time of year or season). The
+user must partition their data in a way that makes sense for a particular
+application. Furthermore, if \code{\link{MBCn}} is being applied to multiple
+spatial locations or grid cells, it is recommended that the same sequence of
+random rotations be used for each location. This can be achived by generating
+the random rotations first and then passing the sequence using the
+\code{rot.seq} argument:
 
+\code{rot.seq <- replicate(niterations, list(rot.random(nvars)))}
+
+\code{bias_correction <- MBCn(..., rot.seq=rot.seq)}
 }
+
 \details{
 \tabular{ll}{
 Package: \tab MBC\cr

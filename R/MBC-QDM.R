@@ -70,17 +70,20 @@ function(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
     if(!is.null(subsample)){
         quant.o.c <- rowMeans(apply(replicate(subsample,
                               sample(o.c, size=length(tau))),
-                              2, quantile, probs=tau, type=pp.type))
+                              2, quantile, probs=tau, type=pp.type,
+                              names=FALSE))
         quant.m.c <- rowMeans(apply(replicate(subsample,
                               sample(m.c, size=length(tau))),
-                              2, quantile, probs=tau, type=pp.type))
+                              2, quantile, probs=tau, type=pp.type,
+                              names=FALSE))
         quant.m.p <- rowMeans(apply(replicate(subsample,
                               sample(m.p, size=length(tau))),
-                              2, quantile, probs=tau, type=pp.type))
+                              2, quantile, probs=tau, type=pp.type,
+                              names=FALSE))
     } else{
-        quant.o.c <- quantile(o.c, tau, type=pp.type)
-        quant.m.c <- quantile(m.c, tau, type=pp.type)
-        quant.m.p <- quantile(m.p, tau, type=pp.type)
+        quant.o.c <- quantile(o.c, tau, type=pp.type, names=FALSE)
+        quant.m.c <- quantile(m.c, tau, type=pp.type, names=FALSE)
+        quant.m.p <- quantile(m.p, tau, type=pp.type, names=FALSE)
     }
     # Apply quantile delta mapping bias correction
     tau.m.p <- approx(quant.m.p, tau, m.p, rule=2, ties='ordered')$y    
